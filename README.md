@@ -1,10 +1,10 @@
 使用方法
 
 1、在线使用：
-网址：https://www.coze.cn/skills?tab=space
+网址：[https://www.coze.cn/skills?tab=space](https://www.coze.cn/?skill_share_pid=7616336164714496019
+)
 技能商店里，直接搜：AI股神中文版 ，作者：程序员三千
-[图片]
-[图片]
+
 
 2、本地安装skill技能包
 skill开源地址：https://github.com/wudengyao/stock-analysis-team
