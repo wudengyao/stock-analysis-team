@@ -8,7 +8,7 @@
 1、在线使用：
 网址：[https://www.coze.cn/skills?tab=space](https://www.coze.cn/?skill_share_pid=7616336164714496019
 )
-技能商店里，直接搜：AI股神中文版 ，作者：程序员三千
+技能商店里，直接搜：AI股神中文版 ，作者：程序员三千，直接使用就行。
 
 
 2、本地安装skill技能包
