@@ -1,6 +1,6 @@
 ---
 name: stock-analysis-team
-description: 提供股票多维度分析团队协同研究能力；当用户需要股票分析、投资决策支持、风险评估、市场复盘或回测验证时使用
+description: "提供股票多维度分析团队协同研究能力，包括计算估值指标（PE/PB/ROE）、生成技术分析图表（K线/MACD/RSI）、评估市场情绪、制定交易策略和模拟回测验证；当用户需要股票分析、投资决策支持、风险评估、市场复盘或回测验证时使用"
 dependency:
   python:
     - yfinance>=0.2.28
@@ -38,19 +38,19 @@ dependency:
      - 如果用户提供文本：智能体识别股票代码（支持A股如 600519.SH，美股如 AAPL）
   2. 调用数据获取脚本
      - 执行 `python scripts/market_data_fetcher.py --symbol <股票代码> --market <cn|us>` 获取实时行情、技术指标和历史数据
-  3. 分析师团队协同工作
-     - 基本面分析师：根据 [analysis-framework.md](references/analysis-framework.md) 中的基本面分析框架，评估财务健康状况
-     - 情绪分析师：分析市场情绪和舆情，给出情绪评分
-     - 新闻分析师：分析相关新闻和宏观经济影响
-     - 技术分析师：根据技术指标（MA、MACD、RSI）判断趋势和买卖点
-  4. 研究员团队辩论
-     - 看多研究员：基于分析师报告列举上涨理由
-     - 看空研究员：基于分析师报告列举下跌风险
+     - **验证**：确认脚本返回有效数据（检查输出非空、无错误信息）。若股票代码无效或网络异常，提示用户检查代码格式或网络连接
+  3. 分析师团队协同工作（每位分析师输出结构化结果：`{score: 1-10, outlook: "正面/中性/负面", reasoning: "...", confidence: 0.0-1.0}`）
+     - 基本面分析师：根据 [analysis-framework.md](references/analysis-framework.md) 评估财务健康状况，计算PE/PB/ROE等估值指标
+     - 情绪分析师：分析市场情绪和舆情，量化情绪评分（-1.0至1.0）
+     - 新闻分析师：分析近期新闻和宏观经济影响，标注利好/利空事件
+     - 技术分析师：根据技术指标（MA、MACD、RSI）判断趋势，标注具体买卖信号
+  4. 研究员团队辩论（输出格式：`{position: "看多/看空", arguments: [...], confidence: 0.0-1.0}`）
+     - 看多研究员：基于分析师报告列举上涨理由和目标价
+     - 看空研究员：基于分析师报告列举下跌风险和止损位
      - 通过结构化辩论，平衡收益与风险
-  5. 交易员团队决策
+  5. 交易员团队决策（输出格式：`{action: "买入/卖出/观望", entry_price: N, target_price: N, stop_loss: N, position_size: "百分比"}`）
      - 综合分析师和研究员报告，制定交易计划
-     - 确定买入/卖出/观望建议
-     - 给出具体的价格点位和仓位建议
+     - 确定买入/卖出/观望建议，给出具体价格点位和仓位建议
   6. 风控与执行团队评估
      - 根据 [risk-scoring-criteria.md](references/risk-scoring-criteria.md) 评估投资风险等级（1-10分）
      - 1-3分：低风险；4-6分：中等风险；7-10分：高风险
@@ -60,18 +60,10 @@ dependency:
      - 如果是美股：根据 Regime Strategy，输出 risk-on/neutral/risk-off 计划
   8. 生成HTML格式研究报告
      - 调用图表生成脚本：`python scripts/chart_generator.py --symbol <股票代码> --market <cn|us> --chart-type all --output-dir ./charts`
+     - **验证**：确认 `./charts` 目录下生成了图表文件，若失败则跳过图表嵌入并在报告中标注
      - 智能体组织报告数据，生成JSON格式数据文件
      - 调用HTML报告生成脚本：`python scripts/html_report_generator.py --data report_data.json --charts-dir ./charts --output report.html`
-     - 生成的HTML报告包含以下内容：
-       - **报告封面**：渐变背景 + 公司名称 + 股票代码 + 分析日期 + 风险等级徽章
-       - **核心结论**：渐变卡片 + 投资建议 + 预期收益 + 最大风险
-       - **公司概览**：信息卡片 + 财务指标表格 + 业务亮点
-       - **技术分析图表**：响应式网格布局 + 4种技术图表（股价走势、K线、MACD、RSI）
-       - **基本面分析**：财务健康度评分表 + 财务数据对比表
-       - **情绪与新闻分析**：情绪指标表 + 情绪趋势
-       - **风险评估**：风险评分进度条 + 各维度评分卡片
-       - **投资建议**：买卖点位表格（带颜色标识）
-       - **免责声明**：黄色警告框
+     - 报告结构和章节规范详见 [report-template.md](references/report-template.md)
   9. AI回测验证（可选）
      - 如果用户要求验证历史准确率：根据 [backtesting-guidelines.md](references/backtesting-guidelines.md) 的方法，评估方向胜率和止盈止损命中率
 
