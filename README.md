@@ -4,15 +4,12 @@
 
 
 # 使用方法
+- 沉淀成skill
+1、直接把下面的核心提示词，扔到TraeWork（https://work.trae.cn/）的对话框里，沉淀成skill就行。
 
-1、在线使用：
-网址：[https://www.coze.cn/skills?tab=space](https://www.coze.cn/?skill_share_pid=7616336164714496019
-)
-技能商店里，直接搜：AI股神中文版 ，作者：程序员三千，直接使用就行。
+- 在线使用
+1、正在开发在线网站，2026年8月底之前会发布，到时候关注下我的抖音视频就行
 
-
-2、本地安装skill技能包
-skill开源地址：https://github.com/wudengyao/stock-analysis-team
 
 # 核心提示词
 ## 一、团队人员介绍
