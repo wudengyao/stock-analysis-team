@@ -1,0 +1,1625 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI股神 · 智能投研团队</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07090f;
+  --bg-2:#0c1019;
+  --panel:#111623;
+  --panel-2:#161c2c;
+  --border:#1f2740;
+  --border-2:#2a3354;
+  --text:#e8ecf6;
+  --text-dim:#8b93b0;
+  --text-faint:#5a6180;
+  --gold:#f5c542;
+  --gold-soft:#b8942f;
+  --bull:#16c784;
+  --bull-soft:#0f8a5c;
+  --bear:#ff4d6d;
+  --bear-soft:#b8354f;
+  --blue:#4d8bff;
+  --purple:#a78bfa;
+  --orange:#ff8a3d;
+  --shadow:0 10px 40px rgba(0,0,0,.5);
+  --radius:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--text);font-family:"Inter","Noto Sans SC",system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body{
+  background:
+    radial-gradient(1200px 600px at 50% -10%, rgba(245,197,66,.08), transparent 60%),
+    radial-gradient(900px 500px at 90% 10%, rgba(77,139,255,.06), transparent 60%),
+    radial-gradient(800px 500px at 10% 30%, rgba(167,139,250,.05), transparent 60%),
+    var(--bg);
+  min-height:100vh;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px);
+  background-size:48px 48px;
+  mask-image:radial-gradient(ellipse at 50% 0%, black 30%, transparent 75%);
+}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+
+.container{max-width:1280px;margin:0 auto;padding:0 24px;position:relative;z-index:1}
+
+/* ============ Header ============ */
+header{
+  padding:22px 0;
+  border-bottom:1px solid var(--border);
+  backdrop-filter:blur(8px);
+  position:sticky;top:0;z-index:50;
+  background:rgba(7,9,15,.75);
+}
+.header-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:12px}
+.logo-mark{
+  width:42px;height:42px;border-radius:11px;
+  background:conic-gradient(from 200deg, var(--gold), #fff7d6, var(--gold-soft), var(--gold));
+  display:grid;place-items:center;position:relative;
+  box-shadow:0 0 24px rgba(245,197,66,.35), inset 0 0 10px rgba(255,255,255,.3);
+}
+.logo-mark::after{content:"财";font-weight:800;color:#1a1205;font-size:20px;line-height:1}
+.logo-text{display:flex;flex-direction:column}
+.logo-text .t1{font-size:20px;font-weight:800;letter-spacing:.5px}
+.logo-text .t1 .accent{background:linear-gradient(135deg,var(--gold),#fff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.logo-text .t2{font-size:11px;color:var(--text-faint);letter-spacing:2px;text-transform:uppercase;margin-top:2px}
+.nav-pills{display:flex;gap:8px}
+.pill{font-size:12px;color:var(--text-dim);padding:6px 12px;border:1px solid var(--border);border-radius:999px;transition:.2s}
+.pill:hover{color:var(--gold);border-color:var(--gold-soft)}
+.pill.active{color:var(--gold);border-color:var(--gold-soft);background:rgba(245,197,66,.08)}
+
+/* ============ Hero / Input ============ */
+.hero{padding:56px 0 40px;text-align:center;position:relative}
+.hero h1{
+  font-size:clamp(30px,5vw,52px);font-weight:800;letter-spacing:-1px;line-height:1.1;
+  margin-bottom:16px;
+}
+.hero h1 .grad{background:linear-gradient(135deg,#fff 0%,var(--gold) 55%,var(--gold-soft) 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:var(--text-dim);font-size:16px;max-width:640px;margin:0 auto 36px;line-height:1.7}
+.hero p .dot{color:var(--gold)}
+
+/* Search bar */
+.search-wrap{
+  max-width:720px;margin:0 auto;
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:10px;
+  display:flex;align-items:center;gap:10px;
+  box-shadow:var(--shadow), 0 0 0 1px rgba(245,197,66,.04);
+  transition:.3s;
+}
+.search-wrap:focus-within{border-color:var(--gold-soft);box-shadow:var(--shadow),0 0 0 4px rgba(245,197,66,.1)}
+.search-icon{color:var(--text-faint);padding:0 6px 0 8px;flex-shrink:0}
+.search-input{
+  flex:1;border:none;outline:none;background:transparent;color:var(--text);
+  font-size:17px;font-weight:500;font-family:inherit;min-width:0;
+}
+.search-input::placeholder{color:var(--text-faint)}
+.divider{width:1px;height:28px;background:var(--border);flex-shrink:0}
+.upload-btn{
+  display:flex;align-items:center;gap:8px;padding:10px 16px;border-radius:12px;
+  border:1px solid var(--border);color:var(--text-dim);font-size:14px;font-weight:500;
+  transition:.2s;flex-shrink:0;
+}
+.upload-btn:hover{color:var(--gold);border-color:var(--gold-soft);background:rgba(245,197,66,.06)}
+.upload-btn.has-file{color:var(--bull);border-color:rgba(22,199,132,.4);background:rgba(22,199,132,.08)}
+.analyze-btn{
+  display:flex;align-items:center;gap:8px;padding:12px 22px;border-radius:12px;
+  background:linear-gradient(135deg,var(--gold),#e6a91f);color:#1a1205;
+  font-weight:700;font-size:15px;transition:.2s;flex-shrink:0;
+  box-shadow:0 6px 20px rgba(245,197,66,.25);
+}
+.analyze-btn:hover{transform:translateY(-1px);box-shadow:0 10px 28px rgba(245,197,66,.4)}
+.analyze-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.analyze-btn .spin{width:16px;height:16px;border:2px solid rgba(26,18,5,.3);border-top-color:#1a1205;border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.suggestions{display:flex;gap:8px;justify-content:center;margin-top:18px;flex-wrap:wrap}
+.suggestions span{font-size:12px;color:var(--text-faint);margin-right:4px;align-self:center}
+.chip{
+  font-size:12px;padding:6px 12px;border-radius:999px;border:1px solid var(--border);
+  color:var(--text-dim);background:var(--panel);cursor:pointer;transition:.2s;
+  font-family:"JetBrains Mono",monospace;
+}
+.chip:hover{color:var(--gold);border-color:var(--gold-soft)}
+
+/* uploaded preview */
+.file-preview{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--bull)}
+.file-preview img{width:32px;height:32px;object-fit:cover;border-radius:6px;border:1px solid var(--border)}
+
+/* ============ Pipeline ============ */
+.pipeline{padding:24px 0 40px}
+.pipeline-title{display:flex;align-items:center;gap:10px;margin-bottom:22px}
+.pipeline-title h2{font-size:18px;font-weight:700}
+.pipeline-title .badge{
+  font-size:11px;padding:3px 10px;border-radius:999px;background:var(--panel-2);
+  border:1px solid var(--border);color:var(--text-faint);font-weight:500;
+}
+
+.stages{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.stage{
+  background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);
+  padding:18px;position:relative;transition:.3s;
+}
+.stage.active{border-color:var(--gold-soft);box-shadow:0 0 0 1px var(--gold-soft), 0 0 30px rgba(245,197,66,.12)}
+.stage.done{border-color:rgba(22,199,132,.3)}
+.stage.done .stage-num{background:var(--bull);color:#042418}
+.stage-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.stage-num{
+  width:28px;height:28px;border-radius:8px;background:var(--panel-2);
+  display:grid;place-items:center;font-weight:700;font-size:13px;color:var(--text-dim);
+  border:1px solid var(--border);
+}
+.stage-status{font-size:11px;color:var(--text-faint);font-weight:500;display:flex;align-items:center;gap:6px}
+.stage.active .stage-status{color:var(--gold)}
+.stage.done .stage-status{color:var(--bull)}
+.pulse{width:7px;height:7px;border-radius:50%;background:currentColor;animation:pulse 1.4s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+.stage-name{font-size:14px;font-weight:700;margin-bottom:10px}
+.stage-sub{font-size:11px;color:var(--text-faint);line-height:1.5}
+.agents-mini{display:flex;flex-direction:column;gap:7px;margin-top:12px}
+.agent-mini{
+  display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-dim);
+  padding:6px 8px;border-radius:8px;background:var(--bg-2);transition:.2s;
+}
+.agent-mini .ico{width:22px;height:22px;border-radius:6px;display:grid;place-items:center;font-size:12px;flex-shrink:0}
+.agent-mini .name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.agent-mini .st{font-size:10px;color:var(--text-faint)}
+.agent-mini.running{background:rgba(245,197,66,.08);color:var(--gold)}
+.agent-mini.running .st{color:var(--gold)}
+.agent-mini.done .st{color:var(--bull)}
+
+/* ============ Live Feed ============ */
+.feed-section{padding:10px 0 60px}
+.feed-grid{display:grid;grid-template-columns:320px 1fr;gap:20px;align-items:start}
+.feed-list{
+  background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);
+  overflow:hidden;position:sticky;top:90px;
+}
+.feed-list-h{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.feed-list-h h3{font-size:14px;font-weight:700}
+.feed-list-h .cnt{font-size:11px;color:var(--text-faint);font-family:"JetBrains Mono",monospace}
+.feed-items{max-height:520px;overflow-y:auto}
+.feed-item{
+  padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.03);
+  display:flex;gap:10px;cursor:pointer;transition:.15s;
+}
+.feed-item:hover{background:var(--panel-2)}
+.feed-item.active{background:var(--panel-2);border-left:2px solid var(--gold);padding-left:14px}
+.feed-item .fi-ico{width:28px;height:28px;border-radius:7px;display:grid;place-items:center;font-size:13px;flex-shrink:0}
+.feed-item .fi-body{min-width:0;flex:1}
+.feed-item .fi-title{font-size:13px;font-weight:600;margin-bottom:2px}
+.feed-item .fi-meta{font-size:11px;color:var(--text-faint)}
+.feed-item .fi-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:8px;background:var(--text-faint)}
+.feed-item.done .fi-dot{background:var(--bull)}
+.feed-item.running .fi-dot{background:var(--gold);box-shadow:0 0 8px var(--gold)}
+
+.feed-content{
+  background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);
+  min-height:520px;
+}
+.feed-empty{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  height:520px;color:var(--text-faint);text-align:center;padding:40px;
+}
+.feed-empty .big-ico{font-size:48px;margin-bottom:16px;opacity:.4}
+.feed-empty h3{font-size:18px;color:var(--text-dim);margin-bottom:8px}
+.feed-empty p{font-size:13px;max-width:360px;line-height:1.7}
+
+.report-card{padding:24px}
+.report-card .rc-head{display:flex;align-items:center;gap:12px;margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.report-card .rc-ico{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;font-size:18px;flex-shrink:0}
+.report-card .rc-title{font-size:17px;font-weight:700}
+.report-card .rc-sub{font-size:12px;color:var(--text-faint)}
+.rc-score{margin-left:auto;display:flex;flex-direction:column;align-items:flex-end}
+.rc-score .v{font-size:22px;font-weight:800;font-family:"JetBrains Mono",monospace}
+.rc-score .l{font-size:10px;color:var(--text-faint)}
+.rc-body{font-size:14px;line-height:1.75;color:var(--text-dim)}
+.rc-body h4{color:var(--text);font-size:14px;font-weight:600;margin:18px 0 8px;display:flex;align-items:center;gap:8px}
+.rc-body h4::before{content:"";width:3px;height:14px;border-radius:2px;background:var(--gold);display:inline-block}
+.rc-body ul{padding-left:18px;margin:8px 0}
+.rc-body li{margin:6px 0}
+.rc-body strong{color:var(--text);font-weight:600}
+.rc-body .bullish{color:var(--bull)}
+.rc-body .bearish{color:var(--bear)}
+.rc-body .highlight{background:rgba(245,197,66,.1);padding:1px 6px;border-radius:4px;color:var(--gold);font-weight:500}
+
+.metrics-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0}
+.metric{
+  background:var(--bg-2);border:1px solid var(--border);border-radius:10px;padding:12px;
+}
+.metric .k{font-size:11px;color:var(--text-faint);margin-bottom:4px}
+.metric .v{font-size:16px;font-weight:700;font-family:"JetBrains Mono",monospace}
+.metric .v.up{color:var(--bull)}
+.metric .v.down{color:var(--bear)}
+.metric .c{font-size:10px;color:var(--text-faint);margin-top:2px}
+
+/* debate */
+.debate{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.debate-side{
+  border-radius:12px;padding:16px;border:1px solid var(--border);background:var(--bg-2);
+}
+.debate-side.bull{border-color:rgba(22,199,132,.3);background:linear-gradient(180deg,rgba(22,199,132,.06),var(--bg-2))}
+.debate-side.bear{border-color:rgba(255,77,109,.3);background:linear-gradient(180deg,rgba(255,77,109,.06),var(--bg-2))}
+.debate-side .ds-h{display:flex;align-items:center;gap:8px;font-weight:700;font-size:14px;margin-bottom:10px}
+.debate-side.bull .ds-h{color:var(--bull)}
+.debate-side.bear .ds-h{color:var(--bear)}
+.debate-side ul{padding-left:16px;font-size:13px;color:var(--text-dim);line-height:1.7}
+
+/* final report */
+.final-report{
+  background:linear-gradient(135deg,var(--panel),var(--panel-2));
+  border:1px solid var(--gold-soft);border-radius:var(--radius);
+  padding:28px;margin-top:20px;position:relative;overflow:hidden;
+  box-shadow:0 0 40px rgba(245,197,66,.08);
+}
+.final-report::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--gold),#fff,var(--gold));
+}
+.fr-head{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;margin-bottom:22px;flex-wrap:wrap}
+.fr-stock{display:flex;flex-direction:column;gap:4px}
+.fr-stock .code{font-size:28px;font-weight:800;font-family:"JetBrains Mono",monospace;letter-spacing:-1px}
+.fr-stock .name{font-size:14px;color:var(--text-dim)}
+.fr-verdict{display:flex;align-items:center;gap:16px}
+.verdict-tag{
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+  padding:10px 18px;border-radius:12px;font-weight:800;font-size:16px;
+}
+.verdict-tag.buy{background:rgba(22,199,132,.12);color:var(--bull);border:1px solid rgba(22,199,132,.3)}
+.verdict-tag.sell{background:rgba(255,77,109,.12);color:var(--bear);border:1px solid rgba(255,77,109,.3)}
+.verdict-tag.hold{background:rgba(245,197,66,.12);color:var(--gold);border:1px solid rgba(245,197,66,.3)}
+.verdict-tag .vt-l{font-size:10px;font-weight:500;opacity:.8;letter-spacing:1px}
+.risk-score{display:flex;flex-direction:column;align-items:center;gap:4px}
+.risk-score .rs-v{font-size:32px;font-weight:800;font-family:"JetBrains Mono",monospace;line-height:1}
+.risk-score .rs-l{font-size:11px;color:var(--text-faint)}
+
+.fr-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:20px}
+.fr-block h4{font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.fr-block h4 .ico{font-size:14px}
+.fr-block .content{font-size:13px;line-height:1.75;color:var(--text-dim);background:var(--bg-2);border:1px solid var(--border);border-radius:10px;padding:14px}
+.score-bars{display:flex;flex-direction:column;gap:10px}
+.score-bar{display:flex;flex-direction:column;gap:4px}
+.score-bar .sb-l{display:flex;justify-content:space-between;font-size:12px}
+.score-bar .sb-l .n{color:var(--text)}
+.score-bar .sb-l .s{color:var(--text-faint);font-family:"JetBrains Mono",monospace}
+.score-bar .bar{height:6px;background:var(--bg);border-radius:3px;overflow:hidden}
+.score-bar .bar i{display:block;height:100%;border-radius:3px;background:linear-gradient(90deg,var(--gold),#fff);width:0;transition:width 1s ease}
+
+.disclaimer{
+  margin-top:24px;padding:14px 16px;background:rgba(255,77,109,.06);
+  border:1px solid rgba(255,77,109,.2);border-radius:10px;
+  font-size:12px;color:var(--text-dim);line-height:1.7;display:flex;gap:10px;
+}
+.disclaimer .ico{color:var(--bear);flex-shrink:0;font-size:16px}
+
+/* DeepSeek settings */
+.api-btn{
+  display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:10px;
+  border:1px solid var(--border);background:var(--panel);color:var(--text-dim);
+  font-size:13px;font-weight:500;transition:.2s;cursor:pointer;
+}
+.api-btn:hover{color:var(--gold);border-color:var(--gold-soft)}
+.api-btn .dot{width:8px;height:8px;border-radius:50%;background:var(--text-faint);flex-shrink:0}
+.api-btn.on .dot{background:var(--bull);box-shadow:0 0 8px var(--bull)}
+.api-btn.on{color:var(--bull);border-color:rgba(22,199,132,.4)}
+.modal-mask{
+  position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);
+  z-index:100;display:none;align-items:center;justify-content:center;padding:20px;
+}
+.modal-mask.open{display:flex}
+.modal{
+  background:var(--panel);border:1px solid var(--border-2);border-radius:16px;
+  padding:24px;max-width:480px;width:100%;box-shadow:var(--shadow);
+}
+.modal h3{font-size:18px;font-weight:700;margin-bottom:6px}
+.modal .sub{font-size:12px;color:var(--text-faint);margin-bottom:16px;line-height:1.6}
+.modal label{font-size:12px;color:var(--text-dim);display:block;margin-bottom:6px}
+.modal input{
+  width:100%;padding:12px 14px;border-radius:10px;border:1px solid var(--border);
+  background:var(--bg-2);color:var(--text);font-size:14px;font-family:"JetBrains Mono",monospace;
+  outline:none;transition:.2s;
+}
+.modal input:focus{border-color:var(--gold-soft);box-shadow:0 0 0 3px rgba(245,197,66,.1)}
+.modal .row{display:flex;gap:10px;margin-top:18px}
+.modal .btn{
+  flex:1;padding:11px;border-radius:10px;font-weight:600;font-size:14px;transition:.2s;
+}
+.modal .btn.primary{background:linear-gradient(135deg,var(--gold),#e6a91f);color:#1a1205}
+.modal .btn.primary:hover{transform:translateY(-1px)}
+.modal .btn.ghost{background:var(--panel-2);color:var(--text-dim);border:1px solid var(--border)}
+.modal .btn.ghost:hover{color:var(--text)}
+.modal .hint{font-size:11px;color:var(--text-faint);margin-top:12px;line-height:1.6}
+.modal .hint a{color:var(--blue)}
+
+/* typing cursor */
+.typing::after{content:"▋";color:var(--gold);animation:blink 1s steps(2) infinite;margin-left:2px}
+@keyframes blink{50%{opacity:0}}
+
+/* scrollbar */
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border-2);border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:var(--text-faint)}
+
+/* footer */
+footer{padding:30px 0;border-top:1px solid var(--border);text-align:center;color:var(--text-faint);font-size:12px}
+footer .disclaimer-mini{margin-top:8px;color:var(--text-faint);font-size:11px}
+
+/* responsive */
+@media (max-width:1024px){
+  .stages{grid-template-columns:repeat(2,1fr)}
+  .feed-grid{grid-template-columns:1fr}
+  .feed-list{position:static;max-height:260px}
+  .fr-grid{grid-template-columns:1fr}
+}
+@media (max-width:640px){
+  .container{padding:0 14px}
+  .stages{grid-template-columns:1fr}
+  .search-wrap{flex-direction:column;align-items:stretch;gap:8px}
+  .divider{display:none}
+  .upload-btn,.analyze-btn{justify-content:center}
+  .metrics-grid{grid-template-columns:1fr 1fr}
+  .debate{grid-template-columns:1fr}
+  .nav-pills{display:none}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container header-inner">
+    <div class="logo">
+      <div class="logo-mark"></div>
+      <div class="logo-text">
+        <span class="t1"><span class="accent">AI股神</span> · Stock Sage</span>
+        <span class="t2">Multi-Agent Equity Research</span>
+      </div>
+    </div>
+    <div class="nav-pills">
+      <span class="pill active">投研</span>
+      <span class="pill">团队</span>
+      <span class="pill">方法</span>
+    </div>
+    <button class="api-btn" id="apiBtn">
+      <span class="dot" id="apiDot"></span>
+      <span id="apiLabel">DeepSeek 未连接</span>
+    </button>
+  </div>
+</header>
+
+<!-- DeepSeek Settings Modal -->
+<div class="modal-mask" id="apiModal">
+  <div class="modal">
+    <h3>🔑 配置 DeepSeek API</h3>
+    <div class="sub">接入 DeepSeek 大模型，让四位智能体生成真实的分析报告。密钥仅保存在你的浏览器本地，不会上传。</div>
+    <label for="apiKeyInput">API Key</label>
+    <input type="password" id="apiKeyInput" placeholder="sk-xxxxxxxxxxxxxxxxxxxxxxxx" autocomplete="off"/>
+    <div class="row">
+      <button class="btn ghost" id="apiCancel">取消</button>
+      <button class="btn primary" id="apiSave">保存并启用</button>
+    </div>
+    <div class="hint">
+      没有密钥？前往 <a href="https://platform.deepseek.com" target="_blank" rel="noopener">platform.deepseek.com</a> 注册获取。<br/>
+      未配置时将使用本地模拟引擎生成演示报告。
+    </div>
+  </div>
+</div>
+
+<main class="container">
+
+  <!-- HERO -->
+  <section class="hero">
+    <h1>把一只股票，交给<span class="grad">四位智能体专家</span><br/>会诊出一份完整研究报告</h1>
+    <p>输入股票代码或上传行情截图，分析师团队挖掘数据 <span class="dot">·</span> 多空研究员辩论去偏 <span class="dot">·</span> 交易员决策 <span class="dot">·</span> 风控官一票否决，最终由投资组合经理拍板。</p>
+
+    <div class="search-wrap">
+      <div class="search-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      </div>
+      <input class="search-input" id="stockInput" placeholder="输入股票代码，例如 AAPL、TSLA、600519、00700..." autocomplete="off"/>
+      <div class="divider"></div>
+      <input type="file" id="fileInput" accept="image/*" hidden/>
+      <button class="upload-btn" id="uploadBtn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        <span id="uploadLabel">上传截图</span>
+      </button>
+      <button class="analyze-btn" id="analyzeBtn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        开始分析
+      </button>
+    </div>
+
+    <div class="suggestions">
+      <span>试试：</span>
+      <span class="chip" data-code="AAPL">AAPL</span>
+      <span class="chip" data-code="TSLA">TSLA</span>
+      <span class="chip" data-code="NVDA">NVDA</span>
+      <span class="chip" data-code="600519">600519</span>
+      <span class="chip" data-code="00700">00700</span>
+      <span class="chip" data-code="MSFT">MSFT</span>
+    </div>
+  </section>
+
+  <!-- PIPELINE -->
+  <section class="pipeline">
+    <div class="pipeline-title">
+      <h2>分析流水线</h2>
+      <span class="badge" id="pipelineBadge">待命</span>
+    </div>
+    <div class="stages" id="stages">
+      <!-- stage 1 -->
+      <div class="stage" data-stage="0">
+        <div class="stage-head">
+          <div class="stage-num">1</div>
+          <div class="stage-status"><span class="pulse" style="display:none"></span><span class="txt">待命</span></div>
+        </div>
+        <div class="stage-name">📊 分析师团队</div>
+        <div class="stage-sub">四维度挖掘原始数据，不做交易决策</div>
+        <div class="agents-mini">
+          <div class="agent-mini" data-agent="fund"><div class="ico" style="background:rgba(77,139,255,.15);color:var(--blue)">📊</div><div class="name">基本面</div><div class="st">待执行</div></div>
+          <div class="agent-mini" data-agent="sent"><div class="ico" style="background:rgba(167,139,250,.15);color:var(--purple)">🗣️</div><div class="name">情绪</div><div class="st">待执行</div></div>
+          <div class="agent-mini" data-agent="news"><div class="ico" style="background:rgba(255,138,61,.15);color:var(--orange)">📰</div><div class="name">新闻</div><div class="st">待执行</div></div>
+          <div class="agent-mini" data-agent="tech"><div class="ico" style="background:rgba(22,199,132,.15);color:var(--bull)">📈</div><div class="name">技术</div><div class="st">待执行</div></div>
+        </div>
+      </div>
+      <!-- stage 2 -->
+      <div class="stage" data-stage="1">
+        <div class="stage-head">
+          <div class="stage-num">2</div>
+          <div class="stage-status"><span class="pulse" style="display:none"></span><span class="txt">待命</span></div>
+        </div>
+        <div class="stage-name">⚖️ 研究员团队</div>
+        <div class="stage-sub">多空辩论消除偏见，模拟投委会</div>
+        <div class="agents-mini">
+          <div class="agent-mini" data-agent="bull"><div class="ico" style="background:rgba(22,199,132,.15);color:var(--bull)">🐂</div><div class="name">看多研究员</div><div class="st">待执行</div></div>
+          <div class="agent-mini" data-agent="bear"><div class="ico" style="background:rgba(255,77,109,.15);color:var(--bear)">🐻</div><div class="name">看空研究员</div><div class="st">待执行</div></div>
+        </div>
+      </div>
+      <!-- stage 3 -->
+      <div class="stage" data-stage="2">
+        <div class="stage-head">
+          <div class="stage-num">3</div>
+          <div class="stage-status"><span class="pulse" style="display:none"></span><span class="txt">待命</span></div>
+        </div>
+        <div class="stage-name">🧑‍💼 交易员</div>
+        <div class="stage-sub">综合多空辩论，制定交易指令</div>
+        <div class="agents-mini">
+          <div class="agent-mini" data-agent="trader"><div class="ico" style="background:rgba(245,197,66,.15);color:var(--gold)">🧑‍💼</div><div class="name">首席交易员</div><div class="st">待执行</div></div>
+        </div>
+      </div>
+      <!-- stage 4 -->
+      <div class="stage" data-stage="3">
+        <div class="stage-head">
+          <div class="stage-num">4</div>
+          <div class="stage-status"><span class="pulse" style="display:none"></span><span class="txt">待命</span></div>
+        </div>
+        <div class="stage-name">🛡️ 风控与执行</div>
+        <div class="stage-sub">评估风险敞口，PM 一票否决</div>
+        <div class="agents-mini">
+          <div class="agent-mini" data-agent="risk"><div class="ico" style="background:rgba(255,77,109,.15);color:var(--bear)">🛡️</div><div class="name">风控官</div><div class="st">待执行</div></div>
+          <div class="agent-mini" data-agent="pm"><div class="ico" style="background:rgba(245,197,66,.15);color:var(--gold)">👑</div><div class="name">投资组合经理</div><div class="st">待执行</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEED -->
+  <section class="feed-section">
+    <div class="feed-grid">
+      <aside class="feed-list">
+        <div class="feed-list-h">
+          <h3>分析日志</h3>
+          <span class="cnt" id="feedCount">0 / 0</span>
+        </div>
+        <div class="feed-items" id="feedItems"></div>
+      </aside>
+      <div class="feed-content" id="feedContent">
+        <div class="feed-empty">
+          <div class="big-ico">🧠</div>
+          <h3>等待你的指令</h3>
+          <p>在上方输入股票代码或上传行情截图，四位智能体将依次启动，实时呈现各自的分析报告。所有报告生成后，将汇总为一份完整研究报告。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Final report inserted here -->
+    <div id="finalReport"></div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="container">
+    <div>AI股神 · Stock Sage — 多智能体股票研究平台（演示版）</div>
+    <div class="disclaimer-mini">⚠️ 本平台所有分析内容由算法模拟生成，仅供学习与研究参考，不构成任何投资建议。投资有风险，入市需谨慎。</div>
+  </div>
+</footer>
+
+<script>
+/* =========================================================
+   AI股神 - 多智能体分析引擎
+   说明：本演示版使用模拟分析引擎生成报告内容。
+        如需接入真实 AI，可在 runAgent() 中将 mockReport
+        替换为 API 调用（如 fetch('/api/agent', {...})）。
+   ========================================================= */
+
+// Agent definitions
+const AGENTS = [
+  { id:'fund',  stage:0, name:'基本面分析师', ico:'📊', color:'var(--blue)',   bg:'rgba(77,139,255,.15)' },
+  { id:'sent',  stage:0, name:'情绪分析师',   ico:'🗣️', color:'var(--purple)', bg:'rgba(167,139,250,.15)' },
+  { id:'news',  stage:0, name:'新闻分析师',   ico:'📰', color:'var(--orange)', bg:'rgba(255,138,61,.15)' },
+  { id:'tech',  stage:0, name:'技术分析师',   ico:'📈', color:'var(--bull)',   bg:'rgba(22,199,132,.15)' },
+  { id:'bull',  stage:1, name:'看多研究员',   ico:'🐂', color:'var(--bull)',   bg:'rgba(22,199,132,.15)' },
+  { id:'bear',  stage:1, name:'看空研究员',   ico:'🐻', color:'var(--bear)',   bg:'rgba(255,77,109,.15)' },
+  { id:'trader',stage:2, name:'首席交易员',   ico:'🧑‍💼', color:'var(--gold)',    bg:'rgba(245,197,66,.15)' },
+  { id:'risk',  stage:3, name:'风控官',       ico:'🛡️', color:'var(--bear)',   bg:'rgba(255,77,109,.15)' },
+  { id:'pm',    stage:3, name:'投资组合经理', ico:'👑', color:'var(--gold)',    bg:'rgba(245,197,66,.15)' },
+];
+
+// State
+let state = { running:false, currentIdx:0, reports:{}, stock:null, uploadedFile:null };
+
+const $ = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
+
+// ---- UI helpers ----
+function setStageStatus(stageIdx, status){
+  const stage = document.querySelector(`.stage[data-stage="${stageIdx}"]`);
+  if(!stage) return;
+  stage.classList.remove('active','done');
+  const txt = stage.querySelector('.stage-status .txt');
+  const pulse = stage.querySelector('.stage-status .pulse');
+  if(status==='active'){ stage.classList.add('active'); txt.textContent='分析中'; pulse.style.display='block'; }
+  else if(status==='done'){ stage.classList.add('done'); txt.textContent='已完成'; pulse.style.display='none'; }
+  else { txt.textContent='待命'; pulse.style.display='none'; }
+}
+function setAgentStatus(agentId, status){
+  const el = document.querySelector(`.agent-mini[data-agent="${agentId}"]`);
+  if(!el) return;
+  el.classList.remove('running','done');
+  const st = el.querySelector('.st');
+  if(status==='running'){ el.classList.add('running'); st.textContent='思考中…'; }
+  else if(status==='done'){ el.classList.add('done'); st.textContent='已完成'; }
+  else { st.textContent='待执行'; }
+}
+
+// ---- Feed list ----
+function buildFeedList(){
+  const box = $('#feedItems');
+  box.innerHTML = '';
+  AGENTS.forEach((a,i)=>{
+    const it = document.createElement('div');
+    it.className = 'feed-item';
+    it.dataset.idx = i;
+    it.innerHTML = `
+      <div class="fi-ico" style="background:${a.bg};color:${a.color}">${a.ico}</div>
+      <div class="fi-body">
+        <div class="fi-title">${a.name}</div>
+        <div class="fi-meta">第 ${a.stage+1} 阶段 · 待执行</div>
+      </div>
+      <div class="fi-dot"></div>
+    `;
+    it.addEventListener('click', ()=> showReport(i));
+    box.appendChild(it);
+  });
+  updateFeedCount();
+}
+function updateFeedItemStatus(idx, status, meta){
+  const it = document.querySelector(`.feed-item[data-idx="${idx}"]`);
+  if(!it) return;
+  it.classList.remove('running','done','active');
+  it.classList.add(status);
+  const m = it.querySelector('.fi-meta');
+  if(meta) m.textContent = meta;
+  if(status==='active') it.scrollIntoView({block:'nearest',behavior:'smooth'});
+}
+function updateFeedCount(){
+  const done = Object.keys(state.reports).length;
+  $('#feedCount').textContent = `${done} / ${AGENTS.length}`;
+}
+
+// ---- Report rendering ----
+function showReport(idx){
+  const agent = AGENTS[idx];
+  const report = state.reports[idx];
+  const box = $('#feedContent');
+  $$('.feed-item').forEach(f=>f.classList.remove('active'));
+  const it = document.querySelector(`.feed-item[data-idx="${idx}"]`);
+  if(it) it.classList.add('active');
+
+  if(!report){
+    box.innerHTML = `<div class="feed-empty"><div class="big-ico">${agent.ico}</div><h3>${agent.name} 准备中</h3><p>等待该智能体启动分析…</p></div>`;
+    return;
+  }
+  box.innerHTML = `
+    <div class="report-card">
+      <div class="rc-head">
+        <div class="rc-ico" style="background:${agent.bg};color:${agent.color}">${agent.ico}</div>
+        <div>
+          <div class="rc-title">${agent.name}</div>
+          <div class="rc-sub">${report.subtitle||''}</div>
+        </div>
+        ${report.score?`<div class="rc-score"><div class="v" style="color:${agent.color}">${report.score}</div><div class="l">${report.scoreLabel||'评分'}</div></div>`:''}
+      </div>
+      <div class="rc-body">${report.html}</div>
+    </div>
+  `;
+}
+
+// Stream a report char-by-char with typing effect
+function streamReport(idx, agent, fullHtml, onDone){
+  state.reports[idx] = { subtitle:'分析中…', html:'<span class="typing"></span>' };
+  showReport(idx);
+  // Simple streaming: chunk by characters, render progressively
+  const target = $('#feedContent .rc-body');
+  let i = 0;
+  const chunkSize = 3;
+  function tick(){
+    if(i >= fullHtml.length){
+      state.reports[idx].html = fullHtml;
+      state.reports[idx].subtitle = agent.subtitle || '分析完成';
+      if(agent.score !== undefined){ state.reports[idx].score = agent.score; state.reports[idx].scoreLabel = agent.scoreLabel; }
+      target.innerHTML = fullHtml;
+      onDone && onDone();
+      return;
+    }
+    i += chunkSize + Math.floor(Math.random()*4);
+    const partial = fullHtml.slice(0,i) + '<span class="typing"></span>';
+    target.innerHTML = partial;
+    setTimeout(tick, 8 + Math.random()*14);
+  }
+  tick();
+}
+
+// =====================================================
+//  DEEPSEEK API INTEGRATION
+// =====================================================
+const DS_API = "https://api.deepseek.com/v1/chat/completions";
+const DS_MODEL = "deepseek-chat";
+
+function getApiKey(){ return localStorage.getItem("ds_api_key") || ""; }
+function setApiKey(k){ localStorage.setItem("ds_api_key", k.trim()); }
+function hasApiKey(){ return getApiKey().length > 5; }
+
+function updateApiStatus(){
+  const btn = $('#apiBtn'); const dot = $('#apiDot'); const lbl = $('#apiLabel');
+  if(hasApiKey()){ btn.classList.add('on'); dot.style.background='var(--bull)'; lbl.textContent='DeepSeek 已连接'; }
+  else { btn.classList.remove('on'); dot.style.background='var(--text-faint)'; lbl.textContent='DeepSeek 未连接'; }
+}
+
+// Streaming call to DeepSeek. onDelta(text) is called with each content chunk.
+async function callDeepSeekStream(messages, onDelta){
+  const key = getApiKey();
+  const res = await fetch(DS_API, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${key}`,
+    },
+    body: JSON.stringify({
+      model: DS_MODEL,
+      messages,
+      stream: true,
+      temperature: 0.7,
+      max_tokens: 2048,
+    }),
+  });
+  if(!res.ok){
+    const errText = await res.text().catch(()=>res.statusText);
+    throw new Error(`DeepSeek API ${res.status}: ${errText.slice(0,200)}`);
+  }
+  const reader = res.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = '';
+  while(true){
+    const { done, value } = await reader.read();
+    if(done) break;
+    buffer += decoder.decode(value, { stream:true });
+    const lines = buffer.split('\n');
+    buffer = lines.pop() || '';
+    for(const line of lines){
+      const l = line.trim();
+      if(!l || !l.startsWith('data:')) continue;
+      const payload = l.slice(5).trim();
+      if(payload === '[DONE]') return;
+      try{
+        const j = JSON.parse(payload);
+        const delta = j.choices?.[0]?.delta?.content || '';
+        if(delta) onDelta(delta);
+      }catch(e){ /* ignore */ }
+    }
+  }
+}
+
+// Agent system prompts (adapted from the user's spec)
+const AGENT_PROMPTS = {
+  fund: {
+    subtitle: s=>`${s.name} (${s.code}) · 财务健康评估`,
+    scoreLabel: '基本面评分',
+    system: `你是一位专注于挖掘公司内在价值的基本面分析专家。基于公开信息，对目标股票/公司进行全面分析。
+
+核心任务：
+1. 分析财务报表：研读资产负债表、损益表和现金流量表。
+2. 评估核心指标：计算并解释关键财务比率（P/E, ROE, 债务权益比等）。
+3. 判断价值：识别当前股价被高估还是低估，寻找财务危险信号（收入下降、债务激增等）。
+4. 给出 0-100 的基本面评分。
+
+输出格式要求（必须严格遵守）：
+- 第一行必须是：<!--SCORE:分数-->  （分数是 0-100 的整数）
+- 之后输出 HTML 报告正文，使用以下结构：
+  <h4>📋 财务报表摘要</h4>
+  <div class="metrics-grid"> 内含多个 <div class="metric"><div class="k">指标名</div><div class="v">数值</div><div class="c">说明</div></div> </div>
+  <h4>💡 关键判断</h4><ul><li>...</li></ul>
+  <h4>⚠️ 危险信号</h4><ul><li>...</li></ul>
+  <h4>🎯 内在价值评估</h4><p>...</p>
+- 数值用合理估算，看涨用 class="up"，看跌用 class="down"，高亮用 class="highlight"。
+- 不要输出 markdown 代码块标记，直接输出 HTML。`,
+  },
+  sent: {
+    subtitle: s=>`${s.name} · 市场情绪评分`,
+    scoreLabel: '情绪评分',
+    system: `你是一位敏锐的市场情绪追踪专家，擅长捕捉大众心理。基于公开信息分析目标股票的市场情绪。
+
+核心任务：
+1. 监测社交舆情：分析 Twitter、Reddit (r/wallstreetbets) 及主流媒体讨论热度。
+2. 量化情绪：计算"恐惧与贪婪"指数（0-100），判断过度乐观还是恐慌。
+3. 短期预测：评估大众情绪如何推动短期股价波动。
+4. 给出 0-100 的情绪评分。
+
+输出格式：
+- 第一行：<!--SCORE:分数-->
+- HTML 正文：
+  <h4>🌡️ 恐惧与贪婪指数</h4> + metrics-grid
+  <h4>📊 情绪分布</h4> + score-bars（看涨/看跌/中性百分比进度条）
+  <h4>🔍 关键词热度</h4><p>...</p>
+  <h4>📈 短期预测</h4><p>...</p>
+- 直接输出 HTML，不要 markdown 代码块。`,
+  },
+  news: {
+    subtitle: s=>`${s.name} · 新闻与宏观影响评估`,
+    scoreLabel: '新闻评分',
+    system: `你是一位资深的宏观经济与新闻评论员。基于公开信息分析目标公司。
+
+核心任务：
+1. 解读宏观事件：美联储政策、通胀数据等对市场的影响。
+2. 追踪公司动态：财报、高管变动、监管调查等对公司的冲击。
+3. 关联性分析：判断事件是短期噪音还是长期利好/利空。
+4. 给出 0-100 的新闻面评分。
+
+输出格式：
+- 第一行：<!--SCORE:分数-->
+- HTML 正文：
+  <h4>🌍 宏观环境</h4> + metrics-grid（美元指数、美债收益率、VIX等）
+  <h4>📰 近期重大事件</h4> + 多个事件卡片
+  <h4>⚖️ 影响评估</h4><ul>...</ul>
+- 直接输出 HTML。`,
+  },
+  tech: {
+    subtitle: s=>`${s.name} · 技术面信号`,
+    scoreLabel: '技术评分',
+    system: `你是一位精通图表形态和量化指标的技术分析大师。基于公开信息分析目标公司。
+
+核心任务：
+1. 分析价格行为：历史走势、成交量、支撑/阻力位。
+2. 计算指标：MACD、RSI、布林带等识别买卖信号。
+3. 识别形态：头肩顶、双底、突破等形态预测趋势。
+4. 给出 0-100 的技术面评分。
+
+输出格式：
+- 第一行：<!--SCORE:分数-->
+- HTML 正文：
+  <h4>📉 价格行为</h4> + metrics-grid
+  <h4>📐 关键指标</h4> + metrics-grid（RSI、MACD、布林带）
+  <h4>🎯 关键点位</h4><ul>支撑/阻力/MA</ul>
+  <h4>🔮 形态识别</h4><p>...</p>
+- 直接输出 HTML。`,
+  },
+  bull: {
+    subtitle: s=>`看多论证 · ${s.name}`,
+    scoreLabel: '多头强度',
+    system: `你是一位坚定的多头（Bull），竭尽全力寻找买入理由。基于分析师团队的报告进行分析。
+
+核心任务：
+1. 挖掘亮点：从分析师报告中提取所有积极信号。
+2. 反驳空头：针对潜在风险提出反驳，论证市场反应过度。
+3. 构建做多逻辑：阐述上涨催化剂和长期增长空间。
+4. 给出 0-100 的多头强度评分。
+
+输出格式：
+- 第一行：<!--SCORE:分数-->
+- HTML 正文：
+  <h4>🐂 做多核心逻辑</h4><ul>...</ul>
+  <h4>⚔️ 对空头的反驳</h4><ul>...</ul>
+  <h4>🚀 上涨催化剂</h4><p>目标价...</p>
+- 直接输出 HTML。`,
+  },
+  bear: {
+    subtitle: s=>`看空论证 · ${s.name}`,
+    scoreLabel: '空头强度',
+    system: `你是一位谨慎的空头（Bear），竭尽全力寻找卖出或做空的理由。基于分析师团队的报告进行分析。
+
+核心任务：
+1. 寻找漏洞：关注负面信号、高估值风险和宏观逆风。
+2. 反驳多头：批判多头的乐观假设，指出逻辑漏洞。
+3. 构建避险逻辑：强调下行风险。
+4. 给出 0-100 的空头强度评分。
+
+输出格式：
+- 第一行：<!--SCORE:分数-->
+- HTML 正文：
+  <h4>🐻 避险核心逻辑</h4><ul>...</ul>
+  <h4>⚔️ 对多头的批判</h4><ul>...</ul>
+  <h4>📉 下行风险</h4><p>...</p>
+- 直接输出 HTML。`,
+  },
+  trader: {
+    subtitle: s=>`交易提案 · ${s.name}`,
+    scoreLabel: '决策倾向',
+    system: `你是一位冷静客观的首席交易员，拥有最终决定权。阅读多空研究员的辩论，权衡双方论据。
+
+核心任务：
+1. 综合研判：权衡多头和空头论据力度。
+2. 制定策略：决定买入 Buy、卖出 Sell 或持有 Hold。
+3. 确定细节：时机、方向、仓位、入场价、止损止盈。
+4. 给出 0-100 的决策倾向评分（>60偏多，<40偏空）。
+
+输出格式：
+- 第一行：<!--SCORE:分数-->
+- HTML 正文：
+  <h4>🧭 综合研判</h4><p>多头强度 X，空头强度 Y...</p>
+  <h4>📝 交易指令</h4> 包含方向(Buy/Sell/Hold)、仓位、入场区间、止损/止盈
+  <h4>💡 决策理由</h4><p>...</p>
+- 直接输出 HTML。`,
+  },
+  risk: {
+    subtitle: s=>`风险评估 · ${s.name}`,
+    scoreLabel: '风险等级 /10',
+    system: `你是一位严格的风控官，首要任务是保护本金。审查交易员提交的交易提案。
+
+核心任务：
+1. 审核提案：审查交易提案。
+2. 风险评估：检查风险敞口、流动性、市场波动性（VIX）。
+3. 给出 1-10 的风险等级评分（分数越高风险越大）。
+
+输出格式：
+- 第一行：<!--SCORE:分数-->  （分数是 1-10 的整数）
+- HTML 正文：
+  <h4>🛡️ 风险敞口检查</h4> + metrics-grid（VIX、Beta、流动性、最大回撤等）
+  <h4>⚖️ 审核结论</h4><div>风险等级 X/10...</div>
+  <h4>📋 风控建议</h4><ul>...</ul>
+- 直接输出 HTML。`,
+  },
+  pm: {
+    subtitle: s=>`投资组合经理 · 最终决议`,
+    scoreLabel: 'PM 决议',
+    system: `你是投资组合经理（Portfolio Manager），拥有一票否决权。审阅交易员提案和风控官评估，做出最终批准/拒绝决定。
+
+核心任务：
+1. 综合所有报告做出最终决策。
+2. 若风险等级 ≤ 7 则批准执行，否则拒绝。
+3. 给出评分：批准=100，拒绝=0。
+
+输出格式：
+- 第一行：<!--SCORE:分数-->  （批准填 100，拒绝填 0）
+- HTML 正文：
+  <h4>👑 最终决策</h4><div class="verdict-tag buy/sell">批准执行/拒绝执行</div>
+  <h4>📌 决议说明</h4><ul>...</ul>
+  <h4>📅 复盘节点</h4><p>...</p>
+- 直接输出 HTML。`,
+  },
+};
+
+// Build messages for an agent, including context from prior reports
+function buildAgentMessages(agentId, stock, ctx){
+  const p = AGENT_PROMPTS[agentId];
+  const stockInfo = `目标股票：${stock.name}（代码 ${stock.code}），市场：${stock.sector||'未知'}。`;
+  let userMsg = stockInfo + "\n\n";
+
+  // Inject context for dependent agents
+  if(agentId === 'bull' || agentId === 'bear'){
+    userMsg += "以下是分析师团队的四份报告摘要，请基于这些报告进行你的分析：\n";
+    ['fund','sent','news','tech'].forEach(id=>{
+      if(ctx.reportsText[id]){
+        const a = AGENTS.find(x=>x.id===id);
+        userMsg += `\n【${a.name}报告】\n${ctx.reportsText[id]}\n`;
+      }
+    });
+  } else if(agentId === 'trader'){
+    userMsg += "以下是多空研究员的辩论记录，请综合研判：\n";
+    if(ctx.reportsText.bull) userMsg += `\n【看多研究员】\n${ctx.reportsText.bull}\n`;
+    if(ctx.reportsText.bear) userMsg += `\n【看空研究员】\n${ctx.reportsText.bear}\n`;
+  } else if(agentId === 'risk'){
+    userMsg += `交易员提案的交易方向为：${ctx.action||'Hold'}。请评估该交易的风险。\n`;
+    if(ctx.reportsText.trader) userMsg += `\n【交易员提案】\n${ctx.reportsText.trader}\n`;
+  } else if(agentId === 'pm'){
+    userMsg += `交易员提案方向：${ctx.action||'Hold'}，风控官风险评分：${ctx.riskScore||'未知'}/10。\n`;
+    userMsg += "请做出最终批准/拒绝决定。";
+  }
+
+  return [
+    { role: 'system', content: p.system },
+    { role: 'user', content: userMsg },
+  ];
+}
+
+function parseScore(raw){
+  const m = raw.match(/<!--\s*SCORE\s*:\s*(\d+)\s*-->/i);
+  return m ? parseInt(m[1],10) : null;
+}
+function stripScoreMarker(raw){
+  return raw.replace(/<!--\s*SCORE\s*:\s*\d+\s*-->/i, '').trim();
+}
+
+// =====================================================
+//  MOCK REPORT GENERATORS (per agent)
+//  Each returns { subtitle, score, scoreLabel, html }
+// =====================================================
+function fmt(n,d=2){ return Number(n).toFixed(d); }
+
+function mockFundamentals(stock){
+  // deterministic-ish based on code length
+  const seed = stock.code.length;
+  const pe = (8 + seed*3.7).toFixed(1);
+  const roe = (12 + seed*2.1).toFixed(1);
+  const debtEquity = (0.4 + seed*0.18).toFixed(2);
+  const revGrowth = ((seed%5)*6 - 3).toFixed(1);
+  const grossMargin = (28 + seed*3).toFixed(1);
+  return {
+    subtitle:`${stock.name} (${stock.code}) · 财务健康评估`,
+    score: (60+seed*4), scoreLabel:'基本面评分',
+    html:`
+      <h4>📋 财务报表摘要</h4>
+      <div class="metrics-grid">
+        <div class="metric"><div class="k">市盈率 P/E</div><div class="v">${pe}</div><div class="c">行业中位 ~22</div></div>
+        <div class="metric"><div class="k">净资产收益率 ROE</div><div class="v up">${roe}%</div><div class="c">近3年均值 ${(roe-3).toFixed(1)}%</div></div>
+        <div class="metric"><div class="k">债务权益比</div><div class="v">${debtEquity}</div><div class="c">杠杆水平 ${debtEquity<1?'偏低':'偏高'}</div></div>
+        <div class="metric"><div class="k">营收同比增长</div><div class="v ${revGrowth>=0?'up':'down'}">${revGrowth}%</div><div class="c">季度环比 ${(revGrowth-1.5).toFixed(1)}%</div></div>
+        <div class="metric"><div class="k">毛利率</div><div class="v up">${grossMargin}%</div><div class="c">行业领先</div></div>
+        <div class="metric"><div class="k">经营现金流</div><div class="v up">+${(2+seed*0.8).toFixed(1)}B</div><div class="c">自由现金流为正</div></div>
+      </div>
+      <h4>💡 关键判断</h4>
+      <ul>
+        <li><strong>估值水平：</strong>当前 P/E 为 ${pe}，<span class="highlight">${pe>25?'略高于行业，反映市场对增长的预期':'低于行业均值，存在估值修复空间'}</span>。</li>
+        <li><strong>盈利能力：</strong>ROE 连续 ${3+seed%2} 个季度保持在 ${roe}% 以上，资本回报率稳健。</li>
+        <li><strong>资产负债：</strong>债务权益比 ${debtEquity}，${debtEquity<1?'财务结构健康，偿债压力小':'需关注短期偿债能力'}。</li>
+      </ul>
+      <h4>⚠️ 危险信号</h4>
+      <ul>
+        <li>应收账款周转天数同比上升 ${(4+seed).toFixed(0)} 天，需关注回款质量。</li>
+        <li>存货周转率下降 ${(2+seed%3).toFixed(1)}%，${revGrowth<0?'结合营收放缓，存在去库压力':'需观察后续季度'}。</li>
+      </ul>
+      <h4>🎯 内在价值评估</h4>
+      <p>基于 DCF 模型（WACC ${(8+seed*0.5).toFixed(1)}%，永续增长 2.5%），每股内在价值约 <strong>$${(120+seed*18).toFixed(0)}</strong>。当前股价 ${stock.price||'$'+(100+seed*10).toFixed(0)}，<span class="${pe>25?'bearish':'bullish'}">${pe>25?'短期略被高估，安全边际不足':'存在约 '+(10+seed)+'% 的低估空间'}</span>。</p>
+    `
+  };
+}
+
+function mockSentiment(stock){
+  const seed = stock.code.length;
+  const score = 55 + (seed*7)%30; // 30-85
+  const tweets = (12+seed*3)+'.' +(seed%9)+'K';
+  const reddit = (2+seed%7)+'.' +(seed%9)+'K';
+  const fearGreed = score;
+  let mood = score>65?'贪婪':score<45?'恐惧':'中性';
+  return {
+    subtitle:`${stock.name} · 市场情绪评分 ${score}/100`,
+    score, scoreLabel:'情绪评分',
+    html:`
+      <h4>🌡️ 恐惧与贪婪指数</h4>
+      <div class="metrics-grid">
+        <div class="metric"><div class="k">恐惧贪婪指数</div><div class="v" style="color:${score>65?'var(--bull)':score<45?'var(--bear)':'var(--gold)'}">${fearGreed}</div><div class="c">当前情绪：${mood}</div></div>
+        <div class="metric"><div class="k">Twitter 讨论量</div><div class="v">${tweets}</div><div class="c">24h 内提及</div></div>
+        <div class="metric"><div class="k">Reddit 热度</div><div class="v">${reddit}</div><div class="c">r/wallstreetbets</div></div>
+      </div>
+      <h4>📊 情绪分布</h4>
+      <div class="score-bars">
+        <div class="score-bar"><div class="sb-l"><span class="n">看涨 Bullish</span><span class="s">${(40+seed*3)%45+30}%</span></div><div class="bar"><i style="width:${(40+seed*3)%45+30}%;background:var(--bull)"></i></div></div>
+        <div class="score-bar"><div class="sb-l"><span class="n">看跌 Bearish</span><span class="s">${(20+seed*2)%30+15}%</span></div><div class="bar"><i style="width:${(20+seed*2)%30+15}%;background:var(--bear)"></i></div></div>
+        <div class="score-bar"><div class="sb-l"><span class="n">中性 Neutral</span><span class="s">${(25+seed)%30+20}%</span></div><div class="bar"><i style="width:${(25+seed)%30+20}%;background:var(--text-faint)"></i></div></div>
+      </div>
+      <h4>🔍 关键词热度</h4>
+      <p><span class="highlight">财报超预期</span> <span class="highlight">AI 业务</span> <span class="highlight">回购</span> 为正向高频词；<span class="bearish">监管</span> <span class="bearish">裁员</span> 出现频率较低但呈上升趋势。</p>
+      <h4>📈 短期预测</h4>
+      <p>情绪综合评分 <strong>${score}/100</strong>，整体<span class="${score>65?'bullish':score<45?'bearish':'highlight'}">${mood}</span>。散户资金 ${score>60?'净流入':'净流出'} ${(1+seed%5).toFixed(1)} 亿美元，预计短期内股价可能 <strong>${score>55?'维持偏强震荡':'承压调整'}</strong>。</p>
+    `
+  };
+}
+
+function mockNews(stock){
+  const seed = stock.code.length;
+  const events = [
+    {t:'公司动态',d:`${stock.name} 发布季度财报，营收同比 +${(5+seed*2).toFixed(1)}%，${seed%2===0?'略超':'略低于'}市场预期。`,i:'🏢'},
+    {t:'宏观政策',d:`美联储最新会议纪要显示 ${seed%2===0?'降息预期升温':'维持高利率更久'}，对成长股估值形成${seed%2===0?'支撑':'压制'}。`,i:'🏛️'},
+    {t:'行业新闻',d:`${stock.sector||'科技'}行业 ${seed%3===0?'迎来政策利好':'竞争加剧'}，头部公司份额持续集中。`,i:'🌐'},
+    {t:'突发消息',d: seed%4===0 ? `${stock.name} 宣布 ${(1+seed%5).toFixed(0)}B 美元股票回购计划。` : '分析师上调/下调目标价，分歧加大。', i:'⚡'},
+  ];
+  return {
+    subtitle:`${stock.name} · 新闻与宏观影响评估`,
+    score: 70, scoreLabel:'新闻评分',
+    html:`
+      <h4>🌍 宏观环境</h4>
+      <div class="metrics-grid">
+        <div class="metric"><div class="k">美元指数 DXY</div><div class="v">${(102+seed%6).toFixed(2)}</div><div class="c">${seed%2?'走弱':'走强'}</div></div>
+        <div class="metric"><div class="k">10Y 美债收益率</div><div class="v">${(4.1+seed*0.1).toFixed(2)}%</div><div class="c">估值折现率</div></div>
+        <div class="metric"><div class="k">VIX 恐慌指数</div><div class="v">${(14+seed%6).toFixed(1)}</div><div class="c">${(14+seed%6)<20?'低波动':'风险升温'}</div></div>
+      </div>
+      <h4>📰 近期重大事件</h4>
+      ${events.map(e=>`
+        <div style="background:var(--bg-2);border:1px solid var(--border);border-radius:10px;padding:12px;margin:10px 0">
+          <div style="font-size:12px;color:var(--text-faint);margin-bottom:4px">${e.i} ${e.t}</div>
+          <div style="font-size:13px;line-height:1.6">${e.d}</div>
+        </div>
+      `).join('')}
+      <h4>⚖️ 影响评估</h4>
+      <ul>
+        <li><strong>短期噪音：</strong>分析师评级调整多为情绪驱动，对基本面影响有限。</li>
+        <li><strong>长期${seed%2===0?'利好':'利空'}：</strong>${seed%2===0?'回购+AI投入有望提升长期股东回报':'行业竞争加剧可能压缩利润率'}。</li>
+      </ul>
+    `
+  };
+}
+
+function mockTechnical(stock){
+  const seed = stock.code.length;
+  const rsi = 40 + (seed*9)%40;
+  const macd = (seed%2===0?'+':'-') + (0.1+seed*0.05).toFixed(2);
+  const price = 100+seed*12;
+  const support = (price*(0.88)).toFixed(0);
+  const resist = (price*(1.12)).toFixed(0);
+  return {
+    subtitle:`${stock.name} · 技术面信号`,
+    score: rsi>50?65:40, scoreLabel:'技术评分',
+    html:`
+      <h4>📉 价格行为</h4>
+      <div class="metrics-grid">
+        <div class="metric"><div class="k">当前价格</div><div class="v">$${price.toFixed(2)}</div><div class="c">52周高 $${(price*1.3).toFixed(0)} / 低 $${(price*0.7).toFixed(0)}</div></div>
+        <div class="metric"><div class="k">成交量</div><div class="v">${(20+seed*5).toFixed(0)}M</div><div class="c">${seed%2?'放量':'缩量'}</div></div>
+        <div class="metric"><div class="k">ATR(14)</div><div class="v">${(1.5+seed*0.3).toFixed(2)}</div><div class="c">波动率</div></div>
+      </div>
+      <h4>📐 关键指标</h4>
+      <div class="metrics-grid">
+        <div class="metric"><div class="k">RSI(14)</div><div class="v" style="color:${rsi>70?'var(--bear)':rsi<30?'var(--bull)':'var(--text)'}">${rsi.toFixed(1)}</div><div class="c">${rsi>70?'超买':rsi<30?'超卖':'中性'}</div></div>
+        <div class="metric"><div class="k">MACD</div><div class="v ${macd.startsWith('+')?'up':'down'}">${macd}</div><div class="c">${macd.startsWith('+')?'金叉/多头':'死叉/空头'}</div></div>
+        <div class="metric"><div class="k">布林带位置</div><div class="v">${seed%3===0?'上轨':seed%3===1?'中轨':'下轨'}</div><div class="c">带宽 ${(3+seed).toFixed(1)}%</div></div>
+      </div>
+      <h4>🎯 关键点位</h4>
+      <ul>
+        <li><strong class="bullish">支撑位：</strong>$${support}（前低+斐波那契 0.618 共振）</li>
+        <li><strong class="bearish">阻力位：</strong>$${resist}（前期密集成交区）</li>
+        <li><strong>MA 系统：</strong>价格位于 MA20 ${seed%2?'上方':'下方'}、MA50 ${seed%3?'上方':'下方'}，${seed%2?'短期趋势偏多':'短期趋势偏空'}。</li>
+      </ul>
+      <h4>🔮 形态识别</h4>
+      <p>当前呈现 <span class="highlight">${['上升三角形','箱体震荡','圆弧底','旗形整理'][seed%4]}</span> 形态，成交量 ${seed%2?'配合放大':'未能确认'}。若 ${macd.startsWith('+')?'突破阻力 $'+resist:'跌破支撑 $'+support}，则趋势确认。</p>
+    `
+  };
+}
+
+function mockBull(stock){
+  return {
+    subtitle:`看多论证 · ${stock.name}`,
+    score: 78, scoreLabel:'多头强度',
+    html:`
+      <h4>🐂 做多核心逻辑</h4>
+      <ul>
+        <li><strong>业绩确定性高：</strong>营收连续增长，毛利率维持高位，自由现金流充裕，为股东回报提供坚实基础。</li>
+        <li><strong>估值合理：</strong>PEG 约 ${(0.8+stock.code.length*0.05).toFixed(2)}，低于 1 暗示成长性被低估。</li>
+        <li><strong>技术面配合：</strong>MACD 金叉、价格站稳 MA50，中期趋势向上。</li>
+        <li><strong>情绪回暖：</strong>恐惧贪婪指数回升，散户与机构资金同步净流入。</li>
+      </ul>
+      <h4>⚔️ 对空头的反驳</h4>
+      <ul>
+        <li>关于"估值过高"：考虑到增长质量与护城河，当前估值隐含的是对长期竞争力的定价，而非泡沫。</li>
+        <li>关于"宏观逆风"：公司业务具备防御属性，历史上在加息周期中表现优于大盘。</li>
+      </ul>
+      <h4>🚀 上涨催化剂</h4>
+      <p>下季度财报、新产品发布、潜在回购/分红提升，均可能成为股价突破的导火索。目标价 <strong class="bullish">$${(140+stock.code.length*15).toFixed(0)}</strong>。</p>
+    `
+  };
+}
+function mockBear(stock){
+  return {
+    subtitle:`看空论证 · ${stock.name}`,
+    score: 62, scoreLabel:'空头强度',
+    html:`
+      <h4>🐻 避险核心逻辑</h4>
+      <ul>
+        <li><strong>估值偏贵：</strong>P/E 高于行业均值，若增长不及预期将面临戴维斯双杀。</li>
+        <li><strong>基本面隐忧：</strong>应收账款与存货指标恶化，可能预示需求疲软。</li>
+        <li><strong>技术面转弱：</strong>RSI 接近超买，MACD 有顶背离迹象，追高风险大。</li>
+        <li><strong>宏观不确定：</strong>高利率环境压制成长股估值，地缘政治风险未消。</li>
+      </ul>
+      <h4>⚔️ 对多头的批判</h4>
+      <ul>
+        <li>"成长性"叙事已被市场充分定价，边际增量信息有限。</li>
+        <li>技术指标的"金叉"在高估值背景下往往是诱多信号，需警惕假突破。</li>
+      </ul>
+      <h4>📉 下行风险</h4>
+      <p>若财报不及预期或宏观转向，股价可能回踩支撑位甚至下探 <strong class="bearish">$${(70+stock.code.length*8).toFixed(0)}</strong>。当前风险收益比不具吸引力。</p>
+    `
+  };
+}
+
+function mockTrader(stock, decisions){
+  // trader weighs bull vs bear
+  const bullScore = decisions.bull || 78;
+  const bearScore = decisions.bear || 62;
+  const delta = bullScore - bearScore;
+  let action = 'Hold', cls='hold', reason='多空力量均衡，建议等待更明确信号';
+  if(delta > 12){ action='Buy'; cls='buy'; reason='多头论据显著占优，基本面与技术面共振，建议分批建仓'; }
+  else if(delta < -8){ action='Sell'; cls='sell'; reason='空头风险大于潜在收益，建议减仓或观望'; }
+  return {
+    subtitle:`交易提案 · ${stock.name}`,
+    score: action==='Buy'?82:action==='Sell'?38:55, scoreLabel:'决策倾向',
+    html:`
+      <h4>🧭 综合研判</h4>
+      <p>综合分析师团队四份报告与多空研究员辩论，多头强度 <strong class="bullish">${bullScore}</strong>，空头强度 <strong class="bearish">${bearScore}</strong>，净倾向 <strong style="color:${delta>0?'var(--bull)':'var(--bear)'}">${delta>0?'+':''}${delta}</strong>。</p>
+      <h4>📝 交易指令</h4>
+      <div style="background:var(--bg-2);border:1px solid var(--border);border-radius:12px;padding:16px;margin:10px 0">
+        <div style="display:flex;justify-content:space-between;margin-bottom:10px">
+          <span style="color:var(--text-faint);font-size:12px">操作方向</span>
+          <span class="verdict-tag ${cls}" style="padding:4px 14px;font-size:14px">${action} ${action==='Buy'?'买入':action==='Sell'?'卖出':'持有'}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:10px;font-size:13px">
+          <span style="color:var(--text-faint)">建议仓位</span><span>${action==='Buy'?(5+stock.code.length%10):action==='Sell'?0:3}% 组合权重</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:10px;font-size:13px">
+          <span style="color:var(--text-faint)">入场区间</span><span class="${action==='Buy'?'bullish':'bearish'}">$${action==='Buy'?(90+stock.code.length*8):(120+stock.code.length*10)} - $${action==='Buy'?(100+stock.code.length*8):(135+stock.code.length*10)}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:13px">
+          <span style="color:var(--text-faint)">止损 / 止盈</span><span>SL $${(80+stock.code.length*6)} / TP $${(130+stock.code.length*14)}</span>
+        </div>
+      </div>
+      <h4>💡 决策理由</h4>
+      <p>${reason}。具体执行细节将提交风控官审核。</p>
+    `,
+    _action: action
+  };
+}
+
+function mockRisk(stock, action){
+  const seed = stock.code.length;
+  const vix = 14+seed%6;
+  const riskScore = Math.min(10, Math.max(1, Math.round( (action==='Buy'?6:action==='Sell'?3:4) + (vix-14)*0.3 + seed*0.2 )));
+  return {
+    subtitle:`风险评估 · ${stock.name}`,
+    score: riskScore, scoreLabel:'风险等级 /10',
+    html:`
+      <h4>🛡️ 风险敞口检查</h4>
+      <div class="metrics-grid">
+        <div class="metric"><div class="k">VIX 市场波动</div><div class="v">${vix.toFixed(1)}</div><div class="c">${vix<20?'低波动环境':'高波动'}</div></div>
+        <div class="metric"><div class="k">个股 Beta</div><div class="v">${(0.9+seed*0.12).toFixed(2)}</div><div class="c">相对市场弹性</div></div>
+        <div class="metric"><div class="k">流动性评分</div><div class="v up">${(7+seed%3)}/10</div><div class="c">成交活跃度</div></div>
+        <div class="metric"><div class="k">最大回撤(年)</div><div class="v down">-${(12+seed*2)}%</div><div class="c">历史峰值回撤</div></div>
+        <div class="metric"><div class="k">相关性(大盘)</div><div class="v">${(0.5+seed*0.08).toFixed(2)}</div><div class="c">分散化效果</div></div>
+        <div class="metric"><div class="k">组合集中度</div><div class="v">${(4+seed%8)}%</div><div class="c">单票上限 10%</div></div>
+      </div>
+      <h4>⚖️ 审核结论</h4>
+      <div style="background:${riskScore<=5?'rgba(22,199,132,.08)':'rgba(255,77,109,.08)'};border:1px solid ${riskScore<=5?'rgba(22,199,132,.3)':'rgba(255,77,109,.3)'};border-radius:10px;padding:14px;margin:10px 0">
+        <div style="font-size:13px;line-height:1.7">
+          该交易提案风险等级 <strong style="color:${riskScore<=5?'var(--bull)':'var(--bear)'}">${riskScore}/10</strong>，
+          ${riskScore<=5?'在可接受范围内，符合组合风险敞口限制（单票≤10%）。流动性充足，滑点可控。':'偏高，建议降低仓位上限至 '+(3+seed%5)+'%，或增设对冲头寸。'}
+        </div>
+      </div>
+      <h4>📋 风控建议</h4>
+      <ul>
+        <li>严格执行止损 $${(80+seed*6)}，单笔最大亏损控制在组合净值 1% 以内。</li>
+        <li>分 3 批建仓，避免一次性入场的时点风险。</li>
+        <li>设置波动率止损：若 ATR 单日放大 50%，暂停加仓。</li>
+      </ul>
+    `,
+    _risk: riskScore
+  };
+}
+
+function mockPM(stock, action, riskScore){
+  const approved = riskScore <= 7;
+  return {
+    subtitle:`投资组合经理 · 最终决议`,
+    score: approved?100:0, scoreLabel: approved?'已批准':'已拒绝',
+    html:`
+      <h4>👑 最终决策</h4>
+      <div style="text-align:center;padding:24px 0">
+        <div class="verdict-tag ${approved?'buy':'sell'}" style="display:inline-flex;padding:14px 36px;font-size:22px">
+          ${approved?'✓ 批准执行':'✗ 拒绝执行'}
+          <div class="vt-l">${approved?'APPROVED':'REJECTED'}</div>
+        </div>
+      </div>
+      <h4>📌 决议说明</h4>
+      <p>经审阅分析师团队、多空研究员辩论、交易员提案及风控官评估报告，本投资组合经理做出如下决定：</p>
+      <ul>
+        ${approved?`
+        <li>同意交易员提出的 <strong>${action==='Buy'?'买入':action==='Sell'?'卖出':'持有'}</strong> 提案。</li>
+        <li>采纳风控官建议，仓位上限设为 ${(3+stock.code.length%5)}%。</li>
+        <li>指令已发送至模拟交易所，订单状态：<span class="bullish">已成交</span>。</li>
+        `:`
+        <li>风控评分 ${riskScore}/10 超出可接受阈值。</li>
+        <li>要求交易员重新评估入场时点与仓位，或增设对冲后再次提交。</li>
+        `}
+      </ul>
+      <h4>📅 复盘节点</h4>
+      <p>将于下季度财报发布前 3 个交易日召开投委会复审。</p>
+    `,
+    _approved: approved
+  };
+}
+
+// Stream a report from DeepSeek directly into the panel (real-time tokens)
+async function streamReportFromAPI(idx, agent, stock, ctx){
+  const p = AGENT_PROMPTS[agent.id];
+  const messages = buildAgentMessages(agent.id, stock, ctx);
+  let raw = '';
+  let scoreFound = false;
+  let score = null;
+
+  state.reports[idx] = { subtitle: agent.subtitle || '分析中…', html:'<span class="typing"></span>' };
+  showReport(idx);
+  const target = $('#feedContent .rc-body');
+
+  try{
+    await callDeepSeekStream(messages, (delta)=>{
+      raw += delta;
+      // try extract score once available
+      if(!scoreFound){
+        const s = parseScore(raw);
+        if(s !== null){ scoreFound = true; score = s; agent.score = s; agent.scoreLabel = p.scoreLabel; }
+      }
+      const body = stripScoreMarker(raw);
+      target.innerHTML = body + '<span class="typing"></span>';
+    });
+  }catch(err){
+    target.innerHTML = `<div style="color:var(--bear);padding:16px;background:rgba(255,77,109,.08);border:1px solid rgba(255,77,109,.3);border-radius:10px">
+      <strong>⚠️ DeepSeek 调用失败</strong><br/><span style="font-size:12px">${err.message}</span><br/>
+      <span style="font-size:11px;color:var(--text-faint)">请检查 API Key 是否正确，或网络是否可访问 api.deepseek.com</span>
+    </div>`;
+    state.reports[idx].html = target.innerHTML;
+    state.reports[idx].subtitle = '调用失败';
+    ctx.reportsText[agent.id] = '';
+    return false;
+  }
+
+  // finalize
+  const body = stripScoreMarker(raw);
+  target.innerHTML = body;
+  state.reports[idx].html = body;
+  state.reports[idx].subtitle = p.subtitle(stock);
+  if(score !== null) agent.score = score;
+  agent.scoreLabel = p.scoreLabel;
+  ctx.reportsText[agent.id] = body.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim().slice(0, 3000);
+
+  // extract domain-specific values from the output
+  const text = raw.toLowerCase();
+  if(agent.id === 'trader'){
+    if(/买入|buy\b/.test(text) && !/卖出|sell\b/.test(text)) ctx.action = 'Buy';
+    else if(/卖出|sell\b/.test(text) && !/买入|buy\b/.test(text)) ctx.action = 'Sell';
+    else if(/持有|hold\b/.test(text)) ctx.action = 'Hold';
+    else ctx.action = score > 60 ? 'Buy' : score < 40 ? 'Sell' : 'Hold';
+    ctx.bull = score;
+  } else if(agent.id === 'risk'){
+    ctx.riskScore = score !== null ? Math.min(10, Math.max(1, score)) : 5;
+  } else if(agent.id === 'bull'){
+    ctx.bull = score !== null ? score : 70;
+  } else if(agent.id === 'bear'){
+    ctx.bear = score !== null ? score : 60;
+  } else if(agent.id === 'pm'){
+    ctx.pmApproved = score === 100;
+  }
+  return true;
+}
+
+// Run a single agent: DeepSeek if key available, else mock engine
+async function runAgent(idx, agent, stock, ctx){
+  if(hasApiKey()){
+    const ok = await streamReportFromAPI(idx, agent, stock, ctx);
+    if(ok) return;
+    // fall through to mock if API failed
+  }
+  // mock fallback
+  const report = genReport(agent.id, stock, ctx);
+  agent.subtitle = report.subtitle;
+  agent.score = report.score;
+  agent.scoreLabel = report.scoreLabel;
+  await new Promise(resolve=> streamReport(idx, agent, report.html, resolve));
+  ctx.reportsText[agent.id] = report.html.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim().slice(0,3000);
+  if(agent.id === 'pm') ctx.pmApproved = (report.score === 100);
+}
+
+// Map agent -> mock generator (fallback when no API key)
+function genReport(agentId, stock, ctx){
+  switch(agentId){
+    case 'fund': return mockFundamentals(stock);
+    case 'sent': return mockSentiment(stock);
+    case 'news': return mockNews(stock);
+    case 'tech': return mockTechnical(stock);
+    case 'bull': return mockBull(stock);
+    case 'bear': return mockBear(stock);
+    case 'trader': {
+      const r = mockTrader(stock, ctx);
+      ctx.action = r._action; return r;
+    }
+    case 'risk': {
+      const r = mockRisk(stock, ctx.action);
+      ctx.riskScore = r._risk; return r;
+    }
+    case 'pm': return mockPM(stock, ctx.action, ctx.riskScore);
+  }
+}
+
+// =====================================================
+//  MAIN ANALYSIS PIPELINE
+// =====================================================
+async function startAnalysis(){
+  if(state.running) return;
+  const code = $('#stockInput').value.trim().toUpperCase();
+  if(!code && !state.uploadedFile){ alert('请输入股票代码或上传截图'); return; }
+
+  state.running = true;
+  state.reports = {};
+  state.currentIdx = 0;
+  buildFeedList();
+  $('#finalReport').innerHTML = '';
+
+  // determine stock
+  let stock;
+  if(state.uploadedFile){
+    stock = { code: state.uploadedFile.codeGuess || 'SCAN', name: state.uploadedFile.nameGuess || '截图识别标的', price: state.uploadedFile.price, sector:'综合' };
+  } else {
+    stock = { code, name: guessName(code), price: null, sector: guessSector(code) };
+  }
+  state.stock = stock;
+
+  $('#pipelineBadge').textContent = '分析中…';
+  $('#analyzeBtn').disabled = true;
+  $('#analyzeBtn').innerHTML = '<span class="spin"></span>分析中…';
+
+  const ctx = { bull:78, bear:62, action:'Hold', riskScore:5, reportsText:{}, pmApproved:false };
+
+  for(let i=0;i<AGENTS.length;i++){
+    const agent = AGENTS[i];
+    state.currentIdx = i;
+
+    // stage status
+    setStageStatus(0, i<4?'done': i===4?'active': i>4?'done':'idle');
+    setStageStatus(1, i<4?'idle': i===4||i===5?'active': i>5?'done':'idle');
+    setStageStatus(2, i<6?'idle': i===6?'active': i>6?'done':'idle');
+    setStageStatus(3, i<7?'idle': (i===7||i===8)?'active':'idle');
+
+    // agent mini status
+    setAgentStatus(agent.id, 'running');
+    updateFeedItemStatus(i, 'active', `第 ${agent.stage+1} 阶段 · 分析中`);
+
+    // generate report (DeepSeek if key set, else mock)
+    await runAgent(i, agent, stock, ctx);
+
+    setAgentStatus(agent.id, 'done');
+    updateFeedItemStatus(i, 'done', `第 ${agent.stage+1} 阶段 · 已完成`);
+    updateFeedCount();
+
+    // small pause between agents
+    await new Promise(r=>setTimeout(r, 500));
+  }
+
+  // all done
+  for(let s=0;s<4;s++) setStageStatus(s,'done');
+  $('#pipelineBadge').textContent = '已完成';
+  $('#analyzeBtn').disabled = false;
+  $('#analyzeBtn').innerHTML = `
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+    重新分析
+  `;
+  state.running = false;
+
+  renderFinalReport(stock, ctx);
+}
+
+function guessName(code){
+  const map = {
+    'AAPL':'苹果公司','TSLA':'特斯拉','NVDA':'英伟达','MSFT':'微软',
+    'GOOGL':'谷歌','AMZN':'亚马逊','META':'Meta','600519':'贵州茅台',
+    '00700':'腾讯控股','000001':'平安银行','000858':'五粮液'
+  };
+  return map[code] || `${code} 公司`;
+}
+function guessSector(code){
+  if(/^\d{6}$/.test(code)) return 'A股';
+  if(code==='00700') return '港股科技';
+  return '美股科技';
+}
+
+// =====================================================
+//  FINAL CONSOLIDATED REPORT
+// =====================================================
+function renderFinalReport(stock, ctx){
+  const fund = state.reports[0]?.score||0;
+  const sent = state.reports[1]?.score||0;
+  const news = state.reports[2]?.score||0;
+  const tech = state.reports[3]?.score||0;
+  const action = ctx.action;
+  const risk = ctx.riskScore;
+  const approved = ctx.pmApproved !== undefined ? ctx.pmApproved : (risk <= 7);
+  const vClass = action==='Buy'?'buy':action==='Sell'?'sell':'hold';
+  const vLabel = action==='Buy'?'买入':action==='Sell'?'卖出':'持有';
+
+  const avg = Math.round((fund+sent+news+tech)/4);
+
+  const html = `
+    <div class="final-report" style="margin-top:24px">
+      <div class="fr-head">
+        <div class="fr-stock">
+          <div class="code">${stock.code}</div>
+          <div class="name">${stock.name} · ${stock.sector}</div>
+        </div>
+        <div class="fr-verdict">
+          <div class="verdict-tag ${vClass}">
+            ${vLabel}
+            <div class="vt-l">TRADER</div>
+          </div>
+          <div class="risk-score">
+            <div class="rs-v" style="color:${risk<=5?'var(--bull)':risk<=7?'var(--gold)':'var(--bear)'}">${risk}/10</div>
+            <div class="rs-l">风险等级</div>
+          </div>
+          <div class="verdict-tag ${approved?'buy':'sell'}" style="min-width:96px">
+            ${approved?'批准':'拒绝'}
+            <div class="vt-l">PM 决策</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fr-grid">
+        <div>
+          <div class="fr-block">
+            <h4><span class="ico">📊</span>四维度评分</h4>
+            <div class="content">
+              <div class="score-bars">
+                <div class="score-bar"><div class="sb-l"><span class="n">📊 基本面</span><span class="s">${fund}/100</span></div><div class="bar"><i style="width:${fund}%"></i></div></div>
+                <div class="score-bar"><div class="sb-l"><span class="n">🗣️ 情绪面</span><span class="s">${sent}/100</span></div><div class="bar"><i style="width:${sent}%"></i></div></div>
+                <div class="score-bar"><div class="sb-l"><span class="n">📰 新闻面</span><span class="s">${news}/100</span></div><div class="bar"><i style="width:${news}%"></i></div></div>
+                <div class="score-bar"><div class="sb-l"><span class="n">📈 技术面</span><span class="s">${tech}/100</span></div><div class="bar"><i style="width:${tech}%"></i></div></div>
+              </div>
+              <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border);display:flex;justify-content:space-between;font-size:13px">
+                <span style="color:var(--text-dim)">综合得分</span>
+                <strong style="font-family:'JetBrains Mono',monospace;color:var(--gold);font-size:18px">${avg}/100</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="fr-block" style="margin-top:16px">
+            <h4><span class="ico">⚖️</span>多空辩论摘要</h4>
+            <div class="content">
+              <div class="debate" style="margin:0">
+                <div class="debate-side bull">
+                  <div class="ds-h">🐂 看多（强度 ${ctx.bull}）</div>
+                  <ul><li>业绩确定性高，估值合理</li><li>技术面金叉配合</li><li>情绪与资金面回暖</li></ul>
+                </div>
+                <div class="debate-side bear">
+                  <div class="ds-h">🐻 看空（强度 ${ctx.bear}）</div>
+                  <ul><li>估值偏贵，戴维斯双杀风险</li><li>应收/存货指标恶化</li><li>宏观不确定性高</li></ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="fr-block">
+            <h4><span class="ico">🧑‍💼</span>交易指令</h4>
+            <div class="content">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px">
+                <div><div style="color:var(--text-faint);font-size:11px;margin-bottom:2px">方向</div><strong class="${vClass==='buy'?'bullish':vClass==='sell'?'bearish':''}">${vLabel}</strong></div>
+                <div><div style="color:var(--text-faint);font-size:11px;margin-bottom:2px">仓位</div><strong>${(3+stock.code.length%5)}% 组合</strong></div>
+                <div><div style="color:var(--text-faint);font-size:11px;margin-bottom:2px">入场价</div><strong>$${(90+stock.code.length*8)}-${(100+stock.code.length*8)}</strong></div>
+                <div><div style="color:var(--text-faint);font-size:11px;margin-bottom:2px">止损 / 止盈</div><strong>$${(80+stock.code.length*6)} / $${(130+stock.code.length*14)}</strong></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="fr-block" style="margin-top:16px">
+            <h4><span class="ico">🛡️</span>风控摘要</h4>
+            <div class="content" style="font-size:13px;line-height:1.7">
+              <p>风险评分 <strong style="color:${risk<=5?'var(--bull)':'var(--bear)'}">${risk}/10</strong>，${risk<=5?'在可接受范围内。':'偏高，已要求降低仓位。'}</p>
+              <ul style="padding-left:16px;margin-top:8px">
+                <li>单笔最大亏损 ≤ 组合净值 1%</li>
+                <li>分 3 批建仓，控制时点风险</li>
+                <li>ATR 异动触发暂停加仓</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="fr-block" style="margin-top:16px">
+            <h4><span class="ico">👑</span>PM 最终决议</h4>
+            <div class="content" style="text-align:center;padding:20px">
+              <div class="verdict-tag ${approved?'buy':'sell'}" style="display:inline-flex;padding:12px 28px;font-size:18px">
+                ${approved?'✓ 批准执行':'✗ 拒绝执行'}
+                <div class="vt-l">${approved?'ORDER FILLED':'PLEASE REVISE'}</div>
+              </div>
+              ${approved?'<div style="margin-top:10px;font-size:12px;color:var(--text-faint)">订单已发送至模拟交易所并成交</div>':''}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="disclaimer">
+        <div class="ico">⚠️</div>
+        <div><strong>风险提示：</strong>本报告由 AI 多智能体系统基于公开信息模拟生成，仅供学习与研究参考，<strong>不构成任何投资建议</strong>。市场有风险，投资需谨慎。请在做出任何投资决策前咨询持牌专业人士。</div>
+      </div>
+    </div>
+  `;
+  $('#finalReport').innerHTML = html;
+  // scroll to final report
+  setTimeout(()=>$('#finalReport').scrollIntoView({behavior:'smooth',block:'start'}), 200);
+}
+
+// =====================================================
+//  EVENTS
+// =====================================================
+$('#analyzeBtn').addEventListener('click', startAnalysis);
+$('#stockInput').addEventListener('keydown', e=>{ if(e.key==='Enter') startAnalysis(); });
+
+$$('.chip').forEach(c=>{
+  c.addEventListener('click', ()=>{
+    $('#stockInput').value = c.dataset.code;
+    startAnalysis();
+  });
+});
+
+$('#uploadBtn').addEventListener('click', ()=> $('#fileInput').click());
+$('#fileInput').addEventListener('change', e=>{
+  const f = e.target.files[0];
+  if(!f) return;
+  const reader = new FileReader();
+  reader.onload = ev=>{
+    state.uploadedFile = {
+      name: f.name,
+      dataUrl: ev.target.result,
+      // Simulate OCR-ish extraction: generate guesses
+      codeGuess: ['AAPL','TSLA','NVDA','MSFT'][Math.floor(Math.random()*4)],
+      nameGuess: '截图识别标的',
+      price: '$'+(80+Math.floor(Math.random()*200))
+    };
+    const btn = $('#uploadBtn');
+    btn.classList.add('has-file');
+    btn.innerHTML = `<div class="file-preview"><img src="${ev.target.result}"/><span>${f.name.length>16?f.name.slice(0,14)+'…':f.name}</span></div>`;
+    $('#stockInput').value = state.uploadedFile.codeGuess;
+  };
+  reader.readAsDataURL(f);
+});
+
+// DeepSeek settings modal
+const apiModal = $('#apiModal');
+$('#apiBtn').addEventListener('click', ()=>{
+  $('#apiKeyInput').value = getApiKey();
+  apiModal.classList.add('open');
+  setTimeout(()=>$('#apiKeyInput').focus(), 100);
+});
+$('#apiCancel').addEventListener('click', ()=> apiModal.classList.remove('open'));
+apiModal.addEventListener('click', e=>{ if(e.target===apiModal) apiModal.classList.remove('open'); });
+$('#apiSave').addEventListener('click', ()=>{
+  const k = $('#apiKeyInput').value.trim();
+  if(k && k.length > 5){
+    setApiKey(k);
+    updateApiStatus();
+    apiModal.classList.remove('open');
+  } else {
+    alert('请输入有效的 API Key');
+  }
+});
+$('#apiKeyInput').addEventListener('keydown', e=>{ if(e.key==='Enter') $('#apiSave').click(); });
+
+// init
+buildFeedList();
+updateApiStatus();
+</script>
+</body>
+</html>
